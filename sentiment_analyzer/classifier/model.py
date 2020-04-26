@@ -41,10 +41,11 @@ class Model:
             probabilities = F.softmax(self.classifier(input_ids, attention_mask), dim=1)
         confidence, predicted_class = torch.max(probabilities, dim=1)
         predicted_class = predicted_class.cpu().item()
+        probabilities = probabilities.flatten().cpu().numpy().tolist()
         return (
             config["CLASS_NAMES"][predicted_class],
             confidence,
-            probabilities.flatten().cpu().numpy().tolist(),
+            dict(zip(config["CLASS_NAMES"], probabilities)),
         )
 
 
