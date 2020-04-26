@@ -1,0 +1,14 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.formatting.provider": "black",
+    "python.sortImports.args": [
+        "-rc",
+        "-sp .sort.cfg"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "python.pythonPath": "/home/venelin/.local/share/virtualenvs/deploy-bert-nVc6J_EC/bin/python"
+}

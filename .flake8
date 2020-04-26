@@ -1,0 +1,6 @@
+[flake8]
+max-line-length = 100
+
+# Black violates PEP8
+select = C,E,F,W,B
+ignore = E203, E501, W503, W291, B950, E231
