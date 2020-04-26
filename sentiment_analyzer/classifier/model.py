@@ -1,24 +1,14 @@
+
+import json
+
 import torch
 import torch.nn.functional as F
-from torch import nn
-from transformers import BertModel, BertTokenizer
+from transformers import BertTokenizer
 
-PRE_TRAINED_MODEL_NAME = "bert-base-cased"
-CLASS_NAMES = ["negative", "neutral", "positive"]
-MAX_LEN = 160
+from .sentiment_classifier import SentimentClassifier
 
-
-class SentimentClassifier(nn.Module):
-    def __init__(self, n_classes):
-        super(SentimentClassifier, self).__init__()
-        self.bert = BertModel.from_pretrained(PRE_TRAINED_MODEL_NAME)
-        self.drop = nn.Dropout(p=0.3)
-        self.out = nn.Linear(self.bert.config.hidden_size, n_classes)
-
-    def forward(self, input_ids, attention_mask):
-        _, pooled_output = self.bert(input_ids=input_ids, attention_mask=attention_mask)
-        output = self.drop(pooled_output)
-        return self.out(output)
+with open("config.json") as json_file:
+    config = json.load(json_file)
 
 
 class Model:
@@ -26,11 +16,11 @@ class Model:
 
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-        self.tokenizer = BertTokenizer.from_pretrained(PRE_TRAINED_MODEL_NAME)
+        self.tokenizer = BertTokenizer.from_pretrained(config["BERT_MODEL"])
 
-        classifier = SentimentClassifier(len(CLASS_NAMES))
+        classifier = SentimentClassifier(len(config["CLASS_NAMES"]))
         classifier.load_state_dict(
-            torch.load("assets/model_state_dict.bin", map_location=self.device)
+            torch.load(config["PRE_TRAINED_MODEL"], map_location=self.device)
         )
         classifier = classifier.eval()
         self.classifier = classifier.to(self.device)
@@ -38,7 +28,7 @@ class Model:
     def predict(self, text):
         encoded_text = self.tokenizer.encode_plus(
             text,
-            max_length=MAX_LEN,
+            max_length=config["MAX_SEQUENCE_LEN"],
             add_special_tokens=True,
             return_token_type_ids=False,
             pad_to_max_length=True,
@@ -53,7 +43,7 @@ class Model:
         confidence, predicted_class = torch.max(probabilities, dim=1)
         predicted_class = predicted_class.cpu().item()
         return (
-            CLASS_NAMES[predicted_class],
+            config["CLASS_NAMES"][predicted_class],
             confidence,
             probabilities.flatten().cpu().numpy().tolist(),
         )

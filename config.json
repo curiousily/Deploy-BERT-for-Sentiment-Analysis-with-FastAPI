@@ -1,0 +1,10 @@
+{
+    "BERT_MODEL": "bert-base-cased",
+    "PRE_TRAINED_MODEL": "assets/model_state_dict.bin",
+    "CLASS_NAMES": [
+        "negative",
+        "neutral",
+        "positive"
+    ],
+    "MAX_SEQUENCE_LEN": 160
+}

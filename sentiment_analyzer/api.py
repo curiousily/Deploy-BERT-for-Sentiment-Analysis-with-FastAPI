@@ -3,7 +3,7 @@ from typing import List
 from fastapi import Depends, FastAPI
 from pydantic import BaseModel
 
-from .model.sentiment_classifier import Model, get_model
+from .classifier.model import Model, get_model
 
 app = FastAPI()
 
