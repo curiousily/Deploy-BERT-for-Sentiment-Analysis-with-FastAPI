@@ -13,7 +13,6 @@ class SentimentRequest(BaseModel):
 
 
 class SentimentResponse(BaseModel):
-
     probabilities: Dict[str, float]
     sentiment: str
     confidence: float
