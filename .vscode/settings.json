@@ -5,7 +5,7 @@
     "python.formatting.provider": "black",
     "python.sortImports.args": [
         "-rc",
-        "-sp .sort.cfg"
+        "-sp .isort.cfg"
     ],
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
