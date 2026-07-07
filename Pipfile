@@ -8,6 +8,7 @@ black = "==19.10b0"
 isort = "*"
 flake8 = "*"
 gdown = "*"
+httpie = "*"
 
 [packages]
 fastapi = "*"
